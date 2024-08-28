@@ -50,6 +50,11 @@ export function ticketReducer(state, action){
                 ...state,
                 sortPreference: action.payload
             };
+        case "SET_SORT_BY_DATE":
+            return{
+                ...state,
+                datePreference: action.payload
+            };
         default:
             return state;
         
