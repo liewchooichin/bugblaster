@@ -8,6 +8,7 @@ import TicketForm from './components/TicketForm'
 import { ticketReducer } from './reducer/ticketReducer'
 import TicketList from './components/TicketList'
 import sortTickets from './utilities/sortingUtilities'
+import sortByDate from './utilities/sortByDate'
 
 function App() {
   
@@ -15,7 +16,8 @@ function App() {
   const initialState = { 
     tickets: [],
     editingTicket: null,
-    sortPreference: "High to low"
+    sortPreference: "High to low",
+    datePreference: "Latest"
   };
 
   // Reducer logic
@@ -25,6 +27,7 @@ function App() {
 
   // Sorting tickets
   const sortedTickets = sortTickets(state.tickets, state.sortPreference);
+  const dateSortedTickets = sortByDate(state.tickets, state.datePreference);
 
   // Only show "All Tickets" if there are tickets to show.
   // The && is read then-if there are tickets then render
@@ -45,11 +48,14 @@ function App() {
           <div className="results">
             <h2>All tickets</h2>
 
+            <div>
+            <h3>Sort by priority</h3>
             <select value={state.sortPreference}
               onChange={
                 event => dispatch({
                   type:"SET_SORTING", 
-                  payload: event.target.value})
+                  payload: event.target.value
+                })
               }>
               <option value="High to low">High to low</option>
               <option value="Low to high">Low to high</option>
@@ -59,6 +65,26 @@ function App() {
               tickets={sortedTickets}
               dispatch={dispatch}
             ></TicketList>
+            </div>
+            
+            <div>
+            <h3>Sort by date</h3>
+            <select value={state.datePreference}
+              onChange = { (event) =>  dispatch({
+                  type:"SET_SORT_BY_DATE",
+                  payload: event.target.value
+                })
+              }>
+              <option value="Latest">Latest</option>
+              <option value="Oldest">Oldest</option>
+            </select>
+            
+            <TicketList
+              tickets={dateSortedTickets}
+              dispatch={dispatch}
+            ></TicketList>
+            </div>
+
           </div>
           )
         }
